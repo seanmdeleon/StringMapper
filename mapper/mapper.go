@@ -20,7 +20,7 @@ type Interface interface {
 	GetValueAsRuneSlice() []rune
 }
 
-// MapString takes in an Interface and maps the string given the underlying implementation
+// MapString takes in an Interface and maps the string given the underlying implementation of Interface
 func MapString(i Interface) {
 	for pos := range i.GetValueAsRuneSlice() {
 		i.TransformRune(pos)
@@ -28,7 +28,7 @@ func MapString(i Interface) {
 }
 
 /*
-	SkipString holds data for capitalizing characters within AlphanumericString at a given frequency
+	SkipString holds data for capitalizing characters within alphanumericString at a given frequency
 	SkipString is a structre that implements Interface and Stringer interfaces
 	Keeping the struct fields non-exported for fun!
 */
@@ -46,7 +46,7 @@ var _ Interface = (*SkipString)(nil)
 var _ fmt.Stringer = (*SkipString)(nil)
 
 // NewSkipString is the constructor for a SkipString
-// freq defines the frequence of how many alphanumeric values to skip
+// freq defines the frequence of how many alphanumeric values to skip before capitalizing one
 func NewSkipString(freq int, s string) *SkipString {
 	return &SkipString{
 		frequency:          freq,
@@ -55,7 +55,7 @@ func NewSkipString(freq int, s string) *SkipString {
 	}
 }
 
-// TransformRune transforms a rune (char) to uppercase if the value at pos is lowercase and the count == the frequency
+// TransformRune transforms a rune to uppercase if the value at pos is lowercase and the count == frequency
 func (s *SkipString) TransformRune(pos int) {
 
 	if utils.IsAlphanumericRune(s.runeSlice[pos]) {
@@ -72,13 +72,13 @@ func (s *SkipString) TransformRune(pos int) {
 
 // GetValueAsRuneSlice castes a string to a slice of rune and stores it in the SkipString structure.
 // For this implementation of Interface, it also takes the liberty of lowercasing all characters in the string to begin with
-// This lowercasing using the strings package does not alter the underlying AlphanumericString
+// This lowercasing using the strings package does not alter the underlying alphanumericString
 func (s *SkipString) GetValueAsRuneSlice() []rune {
 	s.runeSlice = []rune(strings.ToLower(s.alphanumericString))
 	return s.runeSlice
 }
 
-// String pretty prints a SkipString
+// String pretty prints a SkipString and its mapping
 func (s *SkipString) String() string {
 	return fmt.Sprintf("SkipString('%s', %d) --> '%s'", s.alphanumericString, s.frequency, string(s.runeSlice))
 }
